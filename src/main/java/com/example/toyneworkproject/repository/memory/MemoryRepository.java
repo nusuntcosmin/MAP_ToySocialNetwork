@@ -1,6 +1,7 @@
 package com.example.toyneworkproject.repository.memory;
 
 import com.example.toyneworkproject.domain.Entity;
+import com.example.toyneworkproject.exceptions.RepositoryException;
 import com.example.toyneworkproject.repository.Repository;
 
 import java.util.HashMap;
@@ -28,7 +29,7 @@ public class MemoryRepository<ID, E extends Entity<ID>> implements Repository<ID
     }
 
     @Override
-    public E save(E entity) {
+    public E save(E entity) throws RepositoryException {
         if (entity==null)
             throw new IllegalArgumentException("entity must be not null");
         if(entities.get(entity.getId()) != null) {
@@ -39,7 +40,7 @@ public class MemoryRepository<ID, E extends Entity<ID>> implements Repository<ID
     }
 
     @Override
-    public E delete(ID id) {
+    public E delete(ID id) throws RepositoryException {
         if(id == null)
             throw new IllegalArgumentException("ID cannot be null");
         E entity= entities.get(id);

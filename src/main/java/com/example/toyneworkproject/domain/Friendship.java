@@ -15,13 +15,23 @@ public class Friendship extends Entity<Pair<UUID,UUID>> {
     private LocalDateTime startedFrom;
 
 
+    public LocalDateTime getStartedFrom() {
+        return startedFrom;
+    }
+
     public Friendship(UUID firstUserID, UUID secondUserID) {
         this.firstUserID = firstUserID;
         this.secondUserID = secondUserID;
         this.startedFrom = LocalDateTime.now();
-        super.setId(new Pair(firstUserID,secondUserID));
+        super.setId(new Pair<>(firstUserID,secondUserID));
     }
 
+    public Friendship(UUID firstUserID, UUID secondUserID, LocalDateTime startedFrom) {
+        this.firstUserID = firstUserID;
+        this.secondUserID = secondUserID;
+        this.startedFrom = startedFrom;
+        super.setId(new Pair<>(firstUserID,secondUserID));
+    }
 
     public boolean isPartOfFriendship(UUID userUUID){
         return userUUID.equals(firstUserID) ||

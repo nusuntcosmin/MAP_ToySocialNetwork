@@ -4,5 +4,5 @@ public enum RequestStatus {
     REQUEST_ACCEPTED,
     REQUEST_SENT,
 
-    REQUEST_REJECTED
+    REQUEST_REJECTED,
 }

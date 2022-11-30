@@ -5,7 +5,7 @@ import java.util.Objects;
 public class Pair<T1,T2>{
     private T1 firstElement;
     private T2 secondElement;
-    protected T1 getFirstElement() {
+    public T1 getFirstElement() {
         return firstElement;
     }
 
@@ -13,7 +13,7 @@ public class Pair<T1,T2>{
         this.firstElement = firstElement;
     }
 
-    protected T2 getSecondElement() {
+    public T2 getSecondElement() {
         return secondElement;
     }
 

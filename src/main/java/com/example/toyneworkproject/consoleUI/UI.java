@@ -42,9 +42,9 @@ public class UI {
     private void showFriendships(){
         try{
             for(Friendship f : srv.getFriendships()){
-                System.out.println(srv.findByID(f.getFirstUserID()).toString() +
+                System.out.println(srv.findOne(f.getFirstUserID()).toString() +
                         " este prieten cu " +
-                        srv.findByID(f.getSecondUserID()));
+                        srv.findOne(f.getSecondUserID()));
             }
         }catch(Exception Ex){
             System.out.println("There was an error when trying to find an user");

@@ -23,7 +23,7 @@ public class Main {
         ui.runApp();
     }
     public static void main(String[] args){
-       //Main.runApp();
+       Main.runApp();
 
 
 
