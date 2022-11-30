@@ -2,7 +2,7 @@ package com.example.toyneworkproject.repository.database;
 
 import com.example.toyneworkproject.domain.Friendship;
 import com.example.toyneworkproject.repository.memory.MemoryRepository;
-import com.example.toyneworkproject.utils.Pair;
+import com.example.toyneworkproject.utils.pairDataStructure.Pair;
 
 import java.util.UUID;
 

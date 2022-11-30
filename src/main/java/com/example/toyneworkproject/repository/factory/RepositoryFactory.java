@@ -6,7 +6,7 @@ import com.example.toyneworkproject.repository.Repository;
 import com.example.toyneworkproject.repository.database.RepositoryDatabaseFriendship;
 import com.example.toyneworkproject.repository.database.RepositoryDatabaseUser;
 import com.example.toyneworkproject.repository.memory.MemoryRepository;
-import com.example.toyneworkproject.utils.Pair;
+import com.example.toyneworkproject.utils.pairDataStructure.Pair;
 
 import java.util.UUID;
 

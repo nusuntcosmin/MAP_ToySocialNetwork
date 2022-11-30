@@ -5,13 +5,11 @@ import com.example.toyneworkproject.domain.User;
 import com.example.toyneworkproject.exceptions.ServiceException;
 import com.example.toyneworkproject.exceptions.ValidationException;
 import com.example.toyneworkproject.repository.Repository;
-import com.example.toyneworkproject.utils.Pair;
+import com.example.toyneworkproject.utils.pairDataStructure.Pair;
 import com.example.toyneworkproject.validators.UserValidator;
 import com.example.toyneworkproject.validators.Validator;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.UUID;
 
 public class Service {
@@ -49,9 +47,19 @@ public class Service {
         }
         throw new ServiceException("User does not exist");
     }
-    public void deleteFriendship(UUID u1,UUID u2) throws ServiceException {
+
+    private void deleteUsersFriendships(UUID userUUID){
+        getFriendships().forEach(
+                (Friendship f) ->{
+                    if(f.isPartOfFriendship(userUUID)){
+                            deleteFriendship(f.getFirstUserID(),f.getSecondUserID());
+                    }
+        }
+        );
+    }
+    public void deleteFriendship(UUID u1,UUID u2){
         if(!friendShipExist(new Pair(u1,u2)))
-            throw new ServiceException("Friendship between these users does not exist ");
+            throw new RuntimeException("Friendship between these users does not exist ");
 
         repoFriendship.delete(new Pair(u1,u2));
     }
@@ -74,6 +82,8 @@ public class Service {
     }
     public void deleteUserByID(UUID userIDToDelete){
         repoUser.delete(userIDToDelete);
+        deleteUsersFriendships(userIDToDelete);
+
     }
     public User findByEmail(String email){
         for(User u: getUsers()){

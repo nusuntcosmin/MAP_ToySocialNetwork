@@ -1,6 +1,6 @@
 package com.example.toyneworkproject.domain;
 
-import com.example.toyneworkproject.utils.Pair;
+import com.example.toyneworkproject.utils.pairDataStructure.Pair;
 
 import java.time.LocalDateTime;
 import java.util.Objects;
@@ -22,17 +22,23 @@ public class Friendship extends Entity<Pair<UUID,UUID>> {
         super.setId(new Pair(firstUserID,secondUserID));
     }
 
+
+    public boolean isPartOfFriendship(UUID userUUID){
+        return userUUID.equals(firstUserID) ||
+                userUUID.equals(secondUserID);
+    }
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Friendship that = (Friendship) o;
-        return Objects.equals(firstUserID, that.firstUserID) && Objects.equals(secondUserID, that.secondUserID);
+
+        return this.getId().equals(that.getId());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(firstUserID, secondUserID);
+        return Math.abs(Objects.hash(firstUserID, secondUserID) - Objects.hash(secondUserID,firstUserID));
     }
 
     public UUID getFirstUserID() {
