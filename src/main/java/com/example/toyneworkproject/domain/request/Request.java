@@ -2,8 +2,9 @@ package com.example.toyneworkproject.domain.request;
 
 import com.example.toyneworkproject.domain.Entity;
 import com.example.toyneworkproject.utils.pairDataStructure.OrderPair;
-import com.example.toyneworkproject.utils.pairDataStructure.Pair;
 
+
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.UUID;
@@ -12,7 +13,7 @@ public class Request extends Entity<OrderPair<UUID,UUID>> {
     UUID sentFromUserUUID;
     UUID sentToUserUUID;
     LocalDateTime sentTime;
-    RequestStatus requestStatus;
+    String requestStatus;
 
     public Request(UUID sentFromUserUUID, UUID sentToUserUUID) {
         super();
@@ -20,11 +21,18 @@ public class Request extends Entity<OrderPair<UUID,UUID>> {
         this.sentToUserUUID = sentToUserUUID;
 
         super.setId(new OrderPair<>(sentFromUserUUID,sentToUserUUID));
-
-
-        requestStatus = RequestStatus.REQUEST_SENT;
-
+        requestStatus = "Sent";
         sentTime = LocalDateTime.now();
+    }
+
+    public Request(UUID sentFromUserUUID, UUID sentToUserUUID, LocalDateTime sentTime,String requestStatus) {
+        super();
+        this.sentFromUserUUID = sentFromUserUUID;
+        this.sentToUserUUID = sentToUserUUID;
+
+        super.setId(new OrderPair<>(sentFromUserUUID,sentToUserUUID));
+        this.requestStatus = requestStatus;
+        this.sentTime = sentTime;
     }
 
     @Override
@@ -38,5 +46,13 @@ public class Request extends Entity<OrderPair<UUID,UUID>> {
     @Override
     public int hashCode() {
         return Objects.hash(sentFromUserUUID, sentToUserUUID);
+    }
+
+    public LocalDateTime getSentTime() {
+        return sentTime;
+    }
+
+    public String getRequestStatus() {
+        return requestStatus;
     }
 }

@@ -1,10 +1,14 @@
 package com.example.toyneworkproject.repository.database;
 
+import com.example.toyneworkproject.domain.Friendship;
 import com.example.toyneworkproject.domain.request.Request;
 import com.example.toyneworkproject.exceptions.RepositoryException;
 import com.example.toyneworkproject.repository.Repository;
 import com.example.toyneworkproject.utils.pairDataStructure.OrderPair;
 
+import java.sql.*;
+import java.time.LocalDate;
+import java.util.HashSet;
 import java.util.UUID;
 
 public class RepositoryDatabaseRequest implements Repository<OrderPair<UUID,UUID>, Request> {
@@ -15,32 +19,100 @@ public class RepositoryDatabaseRequest implements Repository<OrderPair<UUID,UUID
 
     private String password;
 
-    private final String SAVE_REQUEST_SQL ="";
+    public RepositoryDatabaseRequest(String URL, String username, String password) {
+        super();
+        this.URL = URL;
+        this.username = username;
+        this.password = password;
+    }
+    private final String SAVE_REQUEST_SQL ="INSERT INTO requests(\"firstUserUUID\",\"secondUserUUID\",\"sentTime\",\"requestStatus\")" +
+            " VALUES(?, ? , ?, ?) ;";
 
-    private final String DELETE_REQUEST_SQL="";
+    private final String DELETE_REQUEST_SQL="DELETE from requests " +
+            "\nWHERE \"firstUserUUID\" =? AND \"secondUserUUID\" = ? ;";
+
+    private final String FIND_ONE_REQUEST_SQL = "SELECT * from requests" +
+            " WHERE \"firstUserUUID\" = ? AND \"secondUserUUID\" = ? ;";
+
+    private final String GET_ALL_REQUESTS_SQL = "SELECT * from requests";
+    @Override
+    public Request save(Request entity) throws RepositoryException {
+        try (Connection connection = DriverManager.getConnection(URL, username, password);
+             PreparedStatement ps = connection.prepareStatement(SAVE_REQUEST_SQL)) {
+
+            ps.setObject(1,entity.getId().getFirstElement());
+            ps.setObject(2,entity.getId().getSecondElement());
+            ps.setDate(3, Date.valueOf(entity.getSentTime().toLocalDate()));
+
+            ps.executeUpdate();
+            return entity;
+        } catch (SQLException e) {
+            throw new RepositoryException("Problems ocurred when trying to save the user");
+        }
+    }
+
+    @Override
+    public Request delete(OrderPair<UUID, UUID> requestKey) throws RepositoryException {
+        try (Connection connection = DriverManager.getConnection(URL, username, password);
+             PreparedStatement ps = connection.prepareStatement(DELETE_REQUEST_SQL)) {
+
+            Request requestToDelete = findOne(requestKey);
+
+            ps.setObject(1,requestKey.getFirstElement());
+            ps.setObject(2,requestKey.getSecondElement());
 
 
+            ps.executeUpdate();
 
+            return requestToDelete;
+        } catch (SQLException e) {
+            throw new RepositoryException("Problems ocurred when trying to delete the request");
+        }
+    }
 
     @Override
     public Request findOne(OrderPair<UUID, UUID> uuiduuidOrderPair) throws RepositoryException {
-        return null;
+        try (Connection connection = DriverManager.getConnection(URL, username, password);
+        PreparedStatement statement = connection.prepareStatement(FIND_ONE_REQUEST_SQL);
+        ResultSet resultSet = statement.executeQuery()) {
+
+
+            UUID firstUserUUID = (UUID) resultSet.getObject("firstUserUUID");
+            UUID secondUserUUID = (UUID) resultSet.getObject("secondUserUUID");
+            LocalDate sentTime = ((Date) resultSet.getObject("sentTime")).toLocalDate();
+            String requestStatus = resultSet.getString("requestStatus");
+
+
+            return new Request(firstUserUUID,secondUserUUID,sentTime.atStartOfDay(),requestStatus);
+        } catch (SQLException e) {
+            throw new RuntimeException("Probleme baza date");
+        }
     }
 
     @Override
     public Iterable<Request> findAll() {
-        return null;
+        try (Connection connection = DriverManager.getConnection(URL, username, password);
+             PreparedStatement statement = connection.prepareStatement(GET_ALL_REQUESTS_SQL);
+             ResultSet resultSet = statement.executeQuery()) {
+
+            HashSet<Request> requests = new HashSet<>();
+
+            while (resultSet.next()) {
+                UUID firstUserUUID = (UUID) resultSet.getObject("firstUserUUID");
+                UUID secondUserUUID = (UUID) resultSet.getObject("secondUserUUID");
+                LocalDate sentTime = ((Date) resultSet.getObject("sentTime")).toLocalDate();
+                String requestStatus = resultSet.getString("requestStatus");
+
+                requests.add(new Request(firstUserUUID,secondUserUUID,sentTime.atStartOfDay(),requestStatus));
+            }
+
+            return requests;
+        } catch (SQLException e) {
+            throw new RuntimeException("Probleme baza date");
+        }
     }
 
-    @Override
-    public Request save(Request entity) throws RepositoryException {
-        return null;
-    }
 
-    @Override
-    public Request delete(OrderPair<UUID, UUID> uuiduuidOrderPair) throws RepositoryException {
-        return null;
-    }
 
     @Override
     public Request update(Request entity) throws RepositoryException {

@@ -47,7 +47,7 @@
             <Image url="@../img/friends.png" />
          </image>
       </ImageView>
-      <ImageView accessibleRole="BUTTON" blendMode="COLOR_BURN" fitHeight="35.0" fitWidth="44.0" layoutX="22.0" layoutY="267.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView accessibleRole="BUTTON" blendMode="COLOR_BURN" fitHeight="35.0" fitWidth="44.0" layoutX="22.0" layoutY="267.0" onMouseClicked="#requestsButtonPressed" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../img/request.png" />
          </image>

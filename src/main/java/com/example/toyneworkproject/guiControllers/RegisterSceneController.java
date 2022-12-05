@@ -3,6 +3,7 @@ package com.example.toyneworkproject.guiControllers;
 import com.example.toyneworkproject.MainApp;
 import com.example.toyneworkproject.domain.User;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
@@ -11,7 +12,9 @@ import java.io.IOException;
 
 public class RegisterSceneController extends AbstractController {
 
-    public RegisterSceneController(){}
+    public RegisterSceneController(){
+
+    }
 
     @FXML
     public Text warnTextRegister;
@@ -26,6 +29,8 @@ public class RegisterSceneController extends AbstractController {
     @FXML
     public PasswordField passReEnterRegister;
 
+    @FXML
+    public Button bt;
     private void checkNullFields() throws Exception{
         if(txtEmailRegister.getText().isEmpty() ||
                 txtLastNameRegister.getText().isEmpty() ||

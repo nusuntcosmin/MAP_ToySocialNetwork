@@ -16,7 +16,7 @@ public class StartSceneController extends AbstractController {
     public Label warnLoginLabel;
 
     public StartSceneController(){
-        int a = 2 + 3;
+
     }
     @FXML
     public Text warnTxtLogin;

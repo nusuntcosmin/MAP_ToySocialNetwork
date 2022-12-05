@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.control.Button?>
 <?import javafx.scene.control.SplitPane?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
@@ -9,12 +10,11 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.toyneworkproject.guiControllers.RequestsSceneController">
    <children>
       <ImageView fitHeight="461.0" fitWidth="638.0" layoutX="-534.0" pickOnBounds="true" preserveRatio="true">
          <image>
-            <Image url="@../../../../../../../../../../../../../istockphoto-1139402489-612x612.jpg" />
+            <Image url="@../img/istockphoto-1139402489-612x612.jpg" />
          </image>
       </ImageView>
       <SplitPane dividerPositions="0.5" layoutX="104.0" prefHeight="400.0" prefWidth="495.0">
@@ -26,15 +26,17 @@
                         <Font name="Arial Black" size="15.0" />
                      </font>
                   </Text>
-                  <TableView fx:id="receivedRequests" layoutY="54.0" prefHeight="341.0" prefWidth="243.0">
+                  <TableView fx:id="receivedRequestsTableView" layoutY="54.0" prefHeight="285.0" prefWidth="243.0">
                     <columns>
                       <TableColumn fx:id="receivedRequestNameColumn" prefWidth="75.0" text="Name" />
                       <TableColumn fx:id="receivedRequestEmailColumn" prefWidth="75.0" text="Email" />
+                        <TableColumn fx:id="receivedRequestSentTime" prefWidth="75.0" text="Sent time" />
                     </columns>
                      <columnResizePolicy>
                         <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
                      </columnResizePolicy>
                   </TableView>
+                  <Text fx:id="selectedReceivedRequestText" layoutX="4.0" layoutY="368.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="228.1367073059082" />
                </children>
             </AnchorPane>
           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
@@ -44,18 +46,30 @@
                         <Font name="Arial Black" size="15.0" />
                      </font>
                   </Text>
-                  <TableView fx:id="sentRequests" layoutY="54.0" prefHeight="341.0" prefWidth="243.0">
+                  <TableView fx:id="sentRequestsTableView" layoutY="54.0" prefHeight="285.0" prefWidth="243.0">
                     <columns>
                       <TableColumn fx:id="sentRequestNameColumn" prefWidth="75.0" text="Name" />
                       <TableColumn fx:id="sentRequestEmailColumn" prefWidth="75.0" text="Email" />
+                        <TableColumn fx:id="sentRequestSentTime" prefWidth="75.0" text="Sent time" />
                     </columns>
                      <columnResizePolicy>
                         <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
                      </columnResizePolicy>
                   </TableView>
+                  <Text fx:id="selectedSentRequestText" layoutX="7.0" layoutY="367.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="228.1367073059082" />
                </children>
             </AnchorPane>
         </items>
       </SplitPane>
+      <ImageView fitHeight="53.0" fitWidth="59.0" layoutX="21.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true" />
+      <ImageView blendMode="COLOR_BURN" fitHeight="53.0" fitWidth="46.0" layoutX="28.0" layoutY="14.0" onMouseClicked="#goBack">
+         <image>
+            <Image url="@../img/backButton.jpg" />
+         </image>
+      </ImageView>
+      <Button layoutX="28.0" layoutY="100.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="66.0" text="Accept" />
+      <Button layoutX="28.0" layoutY="141.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="66.0" text="Reject" />
+      <Button layoutX="28.0" layoutY="187.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="66.0" text="Hide" />
+      <Button layoutX="28.0" layoutY="100.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="66.0" text="Unsend" />
    </children>
 </AnchorPane>

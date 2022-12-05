@@ -2,6 +2,7 @@ package com.example.toyneworkproject.service;
 
 import com.example.toyneworkproject.domain.Friendship;
 import com.example.toyneworkproject.domain.User;
+import com.example.toyneworkproject.domain.UserRequestWrapper;
 import com.example.toyneworkproject.domain.request.Request;
 import com.example.toyneworkproject.exceptions.RepositoryException;
 import com.example.toyneworkproject.exceptions.ServiceException;
@@ -12,8 +13,8 @@ import com.example.toyneworkproject.utils.pairDataStructure.Pair;
 import com.example.toyneworkproject.validators.UserValidator;
 import com.example.toyneworkproject.validators.Validator;
 
-import java.util.ArrayList;
-import java.util.UUID;
+import java.time.LocalDateTime;
+import java.util.*;
 
 public class Service {
     Repository<UUID, User> repoUser;
@@ -23,13 +24,86 @@ public class Service {
 
     Validator<User> userValidator;
 
+    public void saveRequest(UUID firstUserUUID, UUID secondUserUUID, String requestStatus, LocalDateTime sentTime) throws RepositoryException {
+        repoRequest.save(new Request(firstUserUUID,secondUserUUID,sentTime,requestStatus));
+
+    }
+
+    public List<Request> getReceivedRequestForUser(UUID userUUID){
+        ArrayList<Request> receivedRequests = new ArrayList<>();
+
+        findAllRequest().forEach(
+                (Request request) ->{
+                    if(request.getId().getSecondElement().equals(userUUID)){
+                        receivedRequests.add(request);
+                    }
+                }
+        );
+        return receivedRequests;
+    }
+
+    public List<UserRequestWrapper> usersThatSentRequestTo(UUID userUUID){
+        ArrayList<UserRequestWrapper> users = new ArrayList<>();
+
+        getReceivedRequestForUser(userUUID).forEach(
+                (Request request) ->{
+                        try {
+                            users.add(new UserRequestWrapper(findOne(request.getId().getFirstElement()),request));
+                        } catch (RepositoryException e) {
+                            throw new RuntimeException(e);
+                        }
+
+                }
+        );
+        return users;
+    }
+
+    public List<Request> getSentRequestForUser(UUID userUUID){
+        ArrayList<Request> sentRequests = new ArrayList<>();
+        findAllRequest().forEach(
+                (Request request) ->{
+                    if(request.getId().getFirstElement().equals(userUUID)){
+                        sentRequests.add(request);
+                    }
+                }
+        );
+        return sentRequests;
+    }
+
+    public List<UserRequestWrapper> usersThatReceiveRequestsFrom(UUID userUUID){
+        ArrayList<UserRequestWrapper> users = new ArrayList<>();
+
+        getSentRequestForUser(userUUID).forEach(
+                (Request request) ->{
+                        try {
+                            users.add(new UserRequestWrapper(findOne(request.getId().getSecondElement()),request));
+                        } catch (RepositoryException e) {
+                            throw new RuntimeException(e);
+                        }
+                }
+        );
+        return users;
+    }
+
+    public void deleteRequest(OrderPair<UUID,UUID> requestID) throws RepositoryException {
+        repoRequest.delete(requestID);
+    }
+
+    public Request findOneRequest(OrderPair<UUID,UUID> requestID) throws RepositoryException {
+        return repoRequest.findOne(requestID);
+    }
+
+    public Iterable<Request> findAllRequest(){
+        return repoRequest.findAll();
+    }
     public void updateOnlineTime(User loggedUser,long nanoSecondsTime) throws RepositoryException {
             loggedUser.setNanoSecondsOnline(nanoSecondsTime);
             repoUser.update(loggedUser);
     }
-    public Service(Repository<UUID, User> repoUser, Repository<Pair<UUID, UUID>, Friendship> repoFriendship) {
+    public Service(Repository<UUID, User> repoUser, Repository<Pair<UUID, UUID>, Friendship> repoFriendship,Repository<OrderPair<UUID,UUID>,Request> repoRequest) {
         this.repoUser = repoUser;
         this.repoFriendship = repoFriendship;
+        this.repoRequest = repoRequest;
         userValidator = new UserValidator();
     }
     public boolean emailExists(String email){
@@ -94,7 +168,7 @@ public class Service {
         }
         throw new ServiceException("An user with this email was not registered");
     }
-    public void updateUser(String email,String newFirstName, String newLastName, String newEmail) throws ServiceException, RepositoryException {
+    public void updateUser(String email,String newFirstName, String newLastName, String newEmail) throws ServiceException, RepositoryException, ValidationException {
 
         if(!emailExists(email))
             throw new ServiceException("This email does not exist");

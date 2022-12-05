@@ -6,6 +6,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.text.Text;
 
+import java.io.IOException;
 
 
 public class AfterLoginController extends AbstractController {
@@ -15,7 +16,6 @@ public class AfterLoginController extends AbstractController {
     private long logInStart;
 
     private int numberOfRequestsReceived;
-
     private long logInFinish;
 
     @FXML
@@ -56,4 +56,9 @@ public class AfterLoginController extends AbstractController {
 
     }
 
+    @FXML
+    public void requestsButtonPressed() throws IOException {
+        MainApp.sendParameterToScene(loggedUser);
+        MainApp.changeScene("scenes/requestsScenes.fxml");
+    }
 }

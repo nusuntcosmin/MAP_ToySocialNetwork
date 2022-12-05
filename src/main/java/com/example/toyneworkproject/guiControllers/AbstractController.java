@@ -8,9 +8,9 @@ import com.example.toyneworkproject.service.Service;
 
 public abstract class AbstractController {
 
-    protected Service service= new Service(RepositoryFactory.getUsersRepo(UserRepositoryTypes.DATABASE_USER_REPOSITORY),
-                RepositoryFactory.getFriendshipsRepo(FriendshipRepositoryTypes.DATABASE_FRIENDSHIP_REPOSITORY));
+    protected static Service service= new Service(RepositoryFactory.getUsersRepo(UserRepositoryTypes.DATABASE_USER_REPOSITORY),
+                RepositoryFactory.getFriendshipsRepo(FriendshipRepositoryTypes.DATABASE_FRIENDSHIP_REPOSITORY),RepositoryFactory.getRequestRepo());
 
-    protected SecurePasswordController securePasswordController = new SecurePasswordController();
+    protected static SecurePasswordController securePasswordController = new SecurePasswordController();
 
 }
