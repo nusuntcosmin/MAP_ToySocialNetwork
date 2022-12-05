@@ -2,10 +2,12 @@ package com.example.toyneworkproject.service;
 
 import com.example.toyneworkproject.domain.Friendship;
 import com.example.toyneworkproject.domain.User;
+import com.example.toyneworkproject.domain.request.Request;
 import com.example.toyneworkproject.exceptions.RepositoryException;
 import com.example.toyneworkproject.exceptions.ServiceException;
 import com.example.toyneworkproject.exceptions.ValidationException;
 import com.example.toyneworkproject.repository.Repository;
+import com.example.toyneworkproject.utils.pairDataStructure.OrderPair;
 import com.example.toyneworkproject.utils.pairDataStructure.Pair;
 import com.example.toyneworkproject.validators.UserValidator;
 import com.example.toyneworkproject.validators.Validator;
@@ -17,8 +19,14 @@ public class Service {
     Repository<UUID, User> repoUser;
     Repository<Pair<UUID,UUID>, Friendship> repoFriendship;
 
+    Repository<OrderPair<UUID,UUID>, Request> repoRequest;
+
     Validator<User> userValidator;
 
+    public void updateOnlineTime(User loggedUser,long nanoSecondsTime) throws RepositoryException {
+            loggedUser.setNanoSecondsOnline(nanoSecondsTime);
+            repoUser.update(loggedUser);
+    }
     public Service(Repository<UUID, User> repoUser, Repository<Pair<UUID, UUID>, Friendship> repoFriendship) {
         this.repoUser = repoUser;
         this.repoFriendship = repoFriendship;
@@ -32,13 +40,13 @@ public class Service {
         }
         return false;
     }
-    public void addUser(String firstName, String lastName, String email) throws ServiceException, ValidationException, RepositoryException {
+    public User addUser(String firstName, String lastName, String email) throws ServiceException, ValidationException, RepositoryException {
         if(emailExists(email))
             throw new ServiceException("This email already exists !");
 
         User user = new User(firstName,lastName,email);
         userValidator.validate(user);
-        repoUser.save(user);
+        return repoUser.save(user);
     }
     public User findOne(UUID userID) throws RepositoryException {
         return repoUser.findOne(userID);
@@ -52,10 +60,10 @@ public class Service {
 
     }
     public void deleteFriendship(UUID u1,UUID u2) throws RepositoryException {
-        if(!friendShipExist(new Pair(u1,u2)))
+        if(!friendShipExist(new Pair<>(u1,u2)))
             throw new RuntimeException("Friendship between these users does not exist ");
 
-        repoFriendship.delete(new Pair(u1,u2));
+        repoFriendship.delete(new Pair<>(u1,u2));
     }
     private boolean friendShipExist(Pair<UUID,UUID> friendshipID){
         for (Friendship f : getFriendships()) {
@@ -69,7 +77,7 @@ public class Service {
         if(u1.equals(u2))
             throw new ServiceException("Users cannot be friends with themselves");
 
-        if(friendShipExist(new Pair(u1,u2)))
+        if(friendShipExist(new Pair<>(u1,u2)))
             throw new ServiceException("These users are already friends");
 
         repoFriendship.save(new Friendship(u1,u2));
@@ -79,12 +87,12 @@ public class Service {
         deleteUsersFriendships(userIDToDelete);
 
     }
-    public User findByEmail(String email){
+    public User findByEmail(String email) throws ServiceException {
         for(User u: getUsers()){
             if(u.getEmail().equals(email))
                 return u;
         }
-        return null;
+        throw new ServiceException("An user with this email was not registered");
     }
     public void updateUser(String email,String newFirstName, String newLastName, String newEmail) throws ServiceException, RepositoryException {
 
@@ -114,7 +122,9 @@ public class Service {
         return repoFriendship.findAll();
     }
 
-
+    public Iterable<Request> getRequests() {
+        return null;
+    }
 
 
 }

@@ -5,7 +5,6 @@ import com.example.toyneworkproject.domain.User;
 import com.example.toyneworkproject.service.Service;
 
 import java.lang.reflect.Method;
-import java.nio.channels.Pipe;
 import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.UUID;
@@ -72,7 +71,7 @@ public class UI {
             method.setAccessible(true);
             method.invoke(this);
         }catch(Exception Ex){
-            Ex.printStackTrace();
+            System.out.println("Invalid option");
         }
     }
 
@@ -95,7 +94,6 @@ public class UI {
     }
     private void addUser(){
         try{
-
             Scanner sc = new Scanner(System.in);
             System.out.println("Give firstName ");
             String firstName = sc.nextLine();
@@ -133,7 +131,6 @@ public class UI {
             return userThatMatch.get(multipleMatchesOption(stringToMatch)).getUserID();
         }
     }
-
     private void deleteFriendship(){
         try{
             Scanner sc = new Scanner(System.in);

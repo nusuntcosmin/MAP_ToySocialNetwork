@@ -2,9 +2,11 @@ package com.example.toyneworkproject.repository.factory;
 
 import com.example.toyneworkproject.domain.Friendship;
 import com.example.toyneworkproject.domain.User;
+import com.example.toyneworkproject.domain.UserLoginInfo;
 import com.example.toyneworkproject.repository.Repository;
 import com.example.toyneworkproject.repository.database.RepositoryDatabaseFriendship;
 import com.example.toyneworkproject.repository.database.RepositoryDatabaseUser;
+import com.example.toyneworkproject.repository.database.RepositoryDatabaseUserLoginInfo;
 import com.example.toyneworkproject.repository.memory.MemoryRepository;
 import com.example.toyneworkproject.utils.pairDataStructure.Pair;
 
@@ -31,7 +33,16 @@ public class RepositoryFactory {
             case MEMORY_FRIENDSHIP_REPOSITORY -> new MemoryRepository<>();
         };
     }
+
+    public static Repository<UUID, UserLoginInfo> getUserLoginInfoRepo(UserLoginInfoRepositoryTypes userLoginInfoRepositoryTypes){
+        return switch(userLoginInfoRepositoryTypes){
+            case DATABASE_USER_LOGIN_INFO_REPOSITORY -> new RepositoryDatabaseUserLoginInfo("jdbc:postgresql://localhost:5432/academic","postgres","parolaMea123");
+
+        };
+    }
     public static RepositoryFactory getInstance(){
         return instance;
     }
+
+
 }

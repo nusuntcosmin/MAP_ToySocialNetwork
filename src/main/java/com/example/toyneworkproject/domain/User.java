@@ -9,6 +9,16 @@ public class User extends Entity<UUID> {
     private String lastName;
     private String email;
 
+    private long nanoSecondsOnline;
+
+    public long getNanoSecondsOnline() {
+        return nanoSecondsOnline;
+    }
+
+    public void setNanoSecondsOnline(long nanoSecondsOnline) {
+        this.nanoSecondsOnline = nanoSecondsOnline;
+    }
+
     private UUID userID;
 
     @Override
@@ -16,10 +26,13 @@ public class User extends Entity<UUID> {
         return firstName + "|" + lastName + "|" + email;
     }
 
+
+
     public User(String firstName, String lastName, String email) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
+        nanoSecondsOnline = 0;
         userID = UUID.randomUUID();
         super.setId(userID);
     }

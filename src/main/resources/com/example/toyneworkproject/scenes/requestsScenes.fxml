@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <ImageView fitHeight="461.0" fitWidth="638.0" layoutX="-534.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../../../../../../../../../../../../../istockphoto-1139402489-612x612.jpg" />
+         </image>
+      </ImageView>
+      <SplitPane dividerPositions="0.5" layoutX="104.0" prefHeight="400.0" prefWidth="495.0">
+        <items>
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
+               <children>
+                  <Text layoutX="42.0" layoutY="31.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Received requests">
+                     <font>
+                        <Font name="Arial Black" size="15.0" />
+                     </font>
+                  </Text>
+                  <TableView fx:id="receivedRequests" layoutY="54.0" prefHeight="341.0" prefWidth="243.0">
+                    <columns>
+                      <TableColumn fx:id="receivedRequestNameColumn" prefWidth="75.0" text="Name" />
+                      <TableColumn fx:id="receivedRequestEmailColumn" prefWidth="75.0" text="Email" />
+                    </columns>
+                     <columnResizePolicy>
+                        <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                     </columnResizePolicy>
+                  </TableView>
+               </children>
+            </AnchorPane>
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
+               <children>
+                  <Text layoutX="69.0" layoutY="31.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Sent requests">
+                     <font>
+                        <Font name="Arial Black" size="15.0" />
+                     </font>
+                  </Text>
+                  <TableView fx:id="sentRequests" layoutY="54.0" prefHeight="341.0" prefWidth="243.0">
+                    <columns>
+                      <TableColumn fx:id="sentRequestNameColumn" prefWidth="75.0" text="Name" />
+                      <TableColumn fx:id="sentRequestEmailColumn" prefWidth="75.0" text="Email" />
+                    </columns>
+                     <columnResizePolicy>
+                        <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                     </columnResizePolicy>
+                  </TableView>
+               </children>
+            </AnchorPane>
+        </items>
+      </SplitPane>
+   </children>
+</AnchorPane>

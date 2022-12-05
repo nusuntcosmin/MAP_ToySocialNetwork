@@ -16,8 +16,8 @@ public class RepositoryDatabaseUser implements Repository<UUID, User> {
     private String username;
     private String password;
 
-    private final String SAVE_USER_SQL = "INSERT INTO users(\"firstName\",\"lastName\",\"userUUID\",\"email\")" +
-            " VALUES(?, ?, ?, ?);";
+    private final String SAVE_USER_SQL = "INSERT INTO users(\"firstName\",\"lastName\",\"userUUID\",\"email\",\"nanoSecondsOnline\")" +
+            " VALUES(?, ?, ?, ?, ?);";
 
     private final String GET_ALL_USERS_SQL = "SELECT * FROM users";
 
@@ -27,7 +27,7 @@ public class RepositoryDatabaseUser implements Repository<UUID, User> {
     private final String DELETE_USER_SQL ="DELETE FROM users \n" +
             "WHERE \"userUUID\" = ? ;";
 
-    private final String UPDATE_USER_SQL ="UPDATE users set \"firstName\" = ? , \"lastName\" = ? , \"email\" = ? " +
+    private final String UPDATE_USER_SQL ="UPDATE users set \"firstName\" = ? , \"lastName\" = ? , \"email\" = ?, \"nanoSecondsOnline\" = ? " +
                                           "\nWHERE \"userUUID\" = ? ;";
 
     public RepositoryDatabaseUser(String URL, String username, String password) {
@@ -59,7 +59,9 @@ public class RepositoryDatabaseUser implements Repository<UUID, User> {
                  String firstName = resultSet.getString("firstName");
                  String lastName = resultSet.getString("lastName");
                  String email = resultSet.getString("email");
+                 long nanoSecondsOnline = resultSet.getLong("nanoSecondsOnline");
                  User userFound = new User(firstName, lastName,email);
+                 userFound.setNanoSecondsOnline(nanoSecondsOnline);
 
                  return userFound;
 
@@ -82,7 +84,9 @@ public class RepositoryDatabaseUser implements Repository<UUID, User> {
                 String firstName = resultSet.getString("firstName");
                 String lastName = resultSet.getString("lastName");
                 String email = resultSet.getString("email");
+                long nanoSecondsOnline = resultSet.getLong("nanoSecondsOnline");
                 User user = new User(firstName, lastName,email);
+                user.setNanoSecondsOnline(nanoSecondsOnline);
                 user.setUserID(userUUID);
                 users.add(user);
             }
@@ -102,7 +106,8 @@ public class RepositoryDatabaseUser implements Repository<UUID, User> {
             ps.setString(1, entity.getFirstName());
             ps.setString(2, entity.getLastName());
             ps.setString(3, entity.getEmail());
-            ps.setObject(4, entity.getUserID());
+            ps.setObject(5, entity.getUserID());
+            ps.setLong(4,entity.getNanoSecondsOnline());
 
             ps.executeUpdate();
 
@@ -123,6 +128,7 @@ public class RepositoryDatabaseUser implements Repository<UUID, User> {
             ps.setString(2, entity.getLastName());
             ps.setString(4, entity.getEmail());
             ps.setObject(3, entity.getUserID());
+            ps.setLong(5, entity.getNanoSecondsOnline());
 
             ps.executeUpdate();
 

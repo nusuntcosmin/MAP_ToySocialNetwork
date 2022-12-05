@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane prefHeight="452.0" prefWidth="759.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.toyneworkproject.guiControllers.RegisterSceneController">
+   <children>
+      <ImageView fitHeight="520.0" fitWidth="759.0" layoutY="-9.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../img/istockphoto-1139402489-612x612.jpg" />
+         </image>
+      </ImageView>
+      <Label layoutX="159.0" layoutY="14.0" text="Register your account now">
+         <font>
+            <Font size="30.0" />
+         </font>
+      </Label>
+      <Label layoutX="33.0" layoutY="101.0" text="First name">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </Label>
+      <Label layoutX="34.0" layoutY="154.0" text="Last name">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </Label>
+      <Label layoutX="352.0" layoutY="101.0" text="Email">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </Label>
+      <Label layoutX="335.0" layoutY="154.0" text="Password">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </Label>
+      <Label layoutX="289.0" layoutY="211.0" text="Re-enter password">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </Label>
+      <PasswordField fx:id="passEnterRegister" layoutX="454.0" layoutY="155.0" />
+      <PasswordField fx:id="passReEnterRegister" layoutX="454.0" layoutY="212.0" />
+      <TextField fx:id="txtEmailRegister" layoutX="454.0" layoutY="102.0" />
+      <TextField fx:id="txtFirstNameRegister" layoutX="130.0" layoutY="102.0" />
+      <TextField fx:id="txtLastNameRegister" layoutX="130.0" layoutY="154.0" />
+      <Button layoutX="289.0" layoutY="296.0" mnemonicParsing="false" onAction="#registerButtonClicked" prefHeight="38.0" prefWidth="100.0" text="Sign Up" />
+      <Label layoutX="273.0" layoutY="129.0" prefHeight="20.0" prefWidth="7.0" textFill="RED">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Label>
+      <Text fx:id="warnTextRegister" fill="RED" layoutX="278.0" layoutY="81.0" strokeType="OUTSIDE" strokeWidth="0.0" />
+      <ImageView blendMode="COLOR_BURN" fitHeight="63.0" fitWidth="59.0" layoutX="25.0" layoutY="20.0" onMouseClicked="#returnButtonPressed" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../img/backButton.jpg" />
+         </image>
+      </ImageView>
+      <Label layoutX="14.0" layoutY="465.0" text="© 2022 Cosmin-Mihai Popa" />
+   </children>
+</AnchorPane>
