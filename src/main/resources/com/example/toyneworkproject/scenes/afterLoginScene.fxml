@@ -9,7 +9,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.toyneworkproject.guiControllers.AfterLoginController">
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml"  fx:controller="com.example.toyneworkproject.guiControllers.AfterLoginController">
    <children>
       <ImageView fitHeight="496.0" fitWidth="696.0" layoutX="-562.0" pickOnBounds="true" preserveRatio="true">
          <image>
@@ -22,7 +22,7 @@
          </image>
       </ImageView>
       <Circle blendMode="LIGHTEN" layoutX="66.0" layoutY="44.0" radius="31.0" stroke="RED" strokeType="INSIDE" />
-      <ImageView accessibleRole="BUTTON" blendMode="COLOR_BURN" depthTest="DISABLE" fitHeight="35.0" fitWidth="150.0" layoutX="27.0" layoutY="128.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView accessibleRole="BUTTON" blendMode="COLOR_BURN" depthTest="DISABLE" fitHeight="35.0" fitWidth="150.0" layoutX="27.0" layoutY="128.0" onMouseClicked="#searchButtonPressed" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../img/search.png" />
          </image>
@@ -42,7 +42,7 @@
             <Font name="System Bold Italic" size="22.0" />
          </font>
       </Text>
-      <ImageView accessibleRole="BUTTON" blendMode="COLOR_BURN" fitHeight="35.0" fitWidth="44.0" layoutX="27.0" layoutY="218.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView accessibleRole="BUTTON" blendMode="COLOR_BURN" fitHeight="35.0" fitWidth="44.0" layoutX="27.0" layoutY="218.0" onMouseClicked="#friendsButtonClicked" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../img/friends.png" />
          </image>

@@ -3,7 +3,7 @@ package com.example.toyneworkproject.repository.factory;
 import com.example.toyneworkproject.domain.Friendship;
 import com.example.toyneworkproject.domain.User;
 import com.example.toyneworkproject.domain.UserLoginInfo;
-import com.example.toyneworkproject.domain.request.Request;
+import com.example.toyneworkproject.domain.Request;
 import com.example.toyneworkproject.repository.Repository;
 import com.example.toyneworkproject.repository.database.RepositoryDatabaseFriendship;
 import com.example.toyneworkproject.repository.database.RepositoryDatabaseRequest;

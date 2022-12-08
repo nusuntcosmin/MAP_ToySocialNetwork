@@ -1,10 +1,8 @@
-package com.example.toyneworkproject.domain.request;
+package com.example.toyneworkproject.domain;
 
-import com.example.toyneworkproject.domain.Entity;
 import com.example.toyneworkproject.utils.pairDataStructure.OrderPair;
 
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.UUID;

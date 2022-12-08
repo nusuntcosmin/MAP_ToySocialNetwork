@@ -1,8 +1,8 @@
 package com.example.toyneworkproject.domain;
 
-import com.example.toyneworkproject.domain.request.Request;
+import com.example.toyneworkproject.utils.pairDataStructure.OrderPair;
 
-import java.time.LocalDateTime;
+import java.util.UUID;
 
 /**
  * For tableview purposes
@@ -10,8 +10,22 @@ import java.time.LocalDateTime;
 public class UserRequestWrapper {
 
     public String userName;
-    public String userEmail;
-    public String requestSentTime;
+    private String userEmail;
+    private String requestSentTime;
+
+    private User user;
+
+    public User getUser() {
+        return user;
+    }
+
+    public Request getRequest() {
+        return request;
+    }
+
+    private Request request;
+
+
 
     public String getUserName() {
         return userName;
@@ -25,9 +39,15 @@ public class UserRequestWrapper {
         return requestSentTime;
     }
 
+
+
     public UserRequestWrapper(User user, Request request){
+
+        this.user = user;
+        this.request = request;
         userName = user.getFirstName() + " " + user.getLastName();
         userEmail = user.getEmail();
         requestSentTime = request.getSentTime().toString();
+
     }
 }

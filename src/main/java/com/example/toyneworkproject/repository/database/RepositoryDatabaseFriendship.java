@@ -9,6 +9,7 @@ import com.example.toyneworkproject.utils.pairDataStructure.Pair;
 
 import java.sql.*;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.UUID;
 
@@ -28,7 +29,7 @@ public class RepositoryDatabaseFriendship implements Repository<Pair<UUID,UUID>,
 
     private final String FIND_ONE_FRIENDSHIP_SQL = "SELECT * from friendship" +
             " WHERE \"firstUserUUID\" = ? AND \"secondUserUUID\" = ? " +
-            " OR \"firstUserUUID\" = ? AND \"secondUserUUID\" ; ";
+            " OR \"firstUserUUID\" = ? AND \"secondUserUUID\" = ? ; ";
     private final String GET_ALL_FRIENDSHIPS_SQL = "SELECT * from friendship";
     public RepositoryDatabaseFriendship(String URL, String username, String password) {
         super();
@@ -98,10 +99,15 @@ public class RepositoryDatabaseFriendship implements Repository<Pair<UUID,UUID>,
     @Override
     public Friendship findOne(Pair<UUID, UUID> friendshipKey) {
         try (Connection connection = DriverManager.getConnection(URL, username, password);
-             PreparedStatement statement = connection.prepareStatement(FIND_ONE_FRIENDSHIP_SQL);
-             ResultSet resultSet = statement.executeQuery()) {
+             PreparedStatement statement = connection.prepareStatement(FIND_ONE_FRIENDSHIP_SQL)){
+            statement.setObject(1,friendshipKey.getFirstElement());
+            statement.setObject(2,friendshipKey.getSecondElement());
+            statement.setObject(3,friendshipKey.getSecondElement());
+            statement.setObject(4,friendshipKey.getFirstElement());
 
+             ResultSet resultSet = statement.executeQuery();
 
+            resultSet.next();
             UUID firstUserUUID = (UUID) resultSet.getObject("firstUserUUID");
             UUID secondUserUUID = (UUID) resultSet.getObject("secondUserUUID");
             LocalDate startedFrom = ((Date) resultSet.getObject("startedFrom")).toLocalDate();

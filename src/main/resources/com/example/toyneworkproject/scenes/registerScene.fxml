@@ -10,7 +10,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane prefHeight="452.0" prefWidth="759.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.toyneworkproject.guiControllers.RegisterSceneController">
+<AnchorPane prefHeight="452.0" prefWidth="759.0" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:controller="com.example.toyneworkproject.guiControllers.RegisterSceneController">
    <children>
       <ImageView fitHeight="520.0" fitWidth="759.0" layoutY="-9.0" pickOnBounds="true" preserveRatio="true">
          <image>

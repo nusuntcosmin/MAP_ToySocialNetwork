@@ -8,7 +8,6 @@ public class User extends Entity<UUID> {
     private String firstName;
     private String lastName;
     private String email;
-
     private long nanoSecondsOnline;
 
     public long getNanoSecondsOnline() {
@@ -23,7 +22,7 @@ public class User extends Entity<UUID> {
 
     @Override
     public String toString() {
-        return firstName + "|" + lastName + "|" + email;
+        return firstName + " " + lastName + " " + email;
     }
 
 

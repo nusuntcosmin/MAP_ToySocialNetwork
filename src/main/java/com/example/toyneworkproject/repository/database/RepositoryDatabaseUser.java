@@ -53,21 +53,28 @@ public class RepositoryDatabaseUser implements Repository<UUID, User> {
     @Override
     public User findOne(UUID uuid) throws RepositoryException {
         try (Connection connection = DriverManager.getConnection(URL, username, password);
-             PreparedStatement statement = connection.prepareStatement(GET_USER_SQL);
-             ResultSet resultSet = statement.executeQuery()) {
+             PreparedStatement statement = connection.prepareStatement(GET_USER_SQL)){
+            statement.setObject(1,uuid);
+             ResultSet resultSet = statement.executeQuery();
+
+             while(resultSet.next()) {
                  UUID userUUID = (UUID) resultSet.getObject("userUUID");
                  String firstName = resultSet.getString("firstName");
                  String lastName = resultSet.getString("lastName");
                  String email = resultSet.getString("email");
                  long nanoSecondsOnline = resultSet.getLong("nanoSecondsOnline");
-                 User userFound = new User(firstName, lastName,email);
+                 User userFound = new User(firstName, lastName, email);
                  userFound.setNanoSecondsOnline(nanoSecondsOnline);
 
+                 userFound.setUserID(userUUID);
+
                  return userFound;
+             }
 
         } catch (SQLException e) {
             throw new RepositoryException("User cannot be found");
         }
+        return null;
     }
 
 

@@ -19,6 +19,11 @@ public class AfterLoginController extends AbstractController {
     private long logInFinish;
 
     @FXML
+    public void friendsButtonClicked() throws IOException {
+        MainApp.sendParameterToScene(loggedUser);
+        MainApp.changeScene("scenes/FriendsScene.fxml");
+    }
+    @FXML
     public Label welcomeUserLabel;
 
     @FXML
@@ -26,8 +31,7 @@ public class AfterLoginController extends AbstractController {
 
     @FXML
     public Text totalTimeSpentOnline;
-
-
+    
     public AfterLoginController(){
             loggedUser = (User) MainApp.getParameterFromScene();
             logInStart = System.nanoTime();
@@ -38,7 +42,7 @@ public class AfterLoginController extends AbstractController {
     public void logOut() throws Exception {
 
         logInFinish= System.nanoTime();
-        service.updateOnlineTime(loggedUser,loggedUser.getNanoSecondsOnline() + logInFinish - logInStart);
+        service.updateOnlineTime(loggedUser,logInStart,logInFinish);
         loggedUser = null;
         MainApp.changeScene("scenes/startScene.fxml");
     }
@@ -52,7 +56,14 @@ public class AfterLoginController extends AbstractController {
         int minutesSpentOnline = (secondsOnline % 3600) /60;
         int secondsSpentOnline = (secondsOnline) % 60;
 
-        totalTimeSpentOnline.setText("Total time spent online : Hours " + hoursSpentOnline +" Minutes " + minutesSpentOnline + " Seconds " + secondsSpentOnline);
+        totalTimeSpentOnline.setText("Total time spent online :  " + hoursSpentOnline +" hours " + minutesSpentOnline + " minutes " + secondsSpentOnline + " seconds");
+
+    }
+
+    @FXML
+    void searchButtonPressed() throws IOException {
+        MainApp.sendParameterToScene(loggedUser);
+        MainApp.changeScene("scenes/searchScene.fxml");
 
     }
 

@@ -1,13 +1,11 @@
 package com.example.toyneworkproject.service;
 
-import com.example.toyneworkproject.domain.Friendship;
-import com.example.toyneworkproject.domain.User;
-import com.example.toyneworkproject.domain.UserRequestWrapper;
-import com.example.toyneworkproject.domain.request.Request;
+import com.example.toyneworkproject.domain.*;
 import com.example.toyneworkproject.exceptions.RepositoryException;
 import com.example.toyneworkproject.exceptions.ServiceException;
 import com.example.toyneworkproject.exceptions.ValidationException;
 import com.example.toyneworkproject.repository.Repository;
+import com.example.toyneworkproject.repository.database.RepositoryDatabaseRequest;
 import com.example.toyneworkproject.utils.pairDataStructure.OrderPair;
 import com.example.toyneworkproject.utils.pairDataStructure.Pair;
 import com.example.toyneworkproject.validators.UserValidator;
@@ -15,20 +13,50 @@ import com.example.toyneworkproject.validators.Validator;
 
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class Service {
     Repository<UUID, User> repoUser;
     Repository<Pair<UUID,UUID>, Friendship> repoFriendship;
 
-    Repository<OrderPair<UUID,UUID>, Request> repoRequest;
+    RepositoryDatabaseRequest repoRequest;
 
     Validator<User> userValidator;
 
-    public void saveRequest(UUID firstUserUUID, UUID secondUserUUID, String requestStatus, LocalDateTime sentTime) throws RepositoryException {
+
+    public void updateRequestStatus(OrderPair<UUID,UUID>requestID, String newRequestStatus) throws RepositoryException {
+        repoRequest.updateRequestStatus(requestID,newRequestStatus);
+    }
+    public void saveRequest(UUID firstUserUUID, UUID secondUserUUID, String requestStatus, LocalDateTime sentTime) throws RepositoryException, ServiceException {
+        if(firstUserUUID.equals(secondUserUUID))
+            throw new ServiceException("You cannot sent a request to yourself");
+
+        if(friendShipExist(new Pair<>(firstUserUUID,secondUserUUID)))
+            throw new ServiceException("You are already friends with this user");
+        Request requestToAdd = new Request(firstUserUUID,secondUserUUID,sentTime,requestStatus);
+
+
+        for(Request request : getRequests()){
+            if(request.equals(requestToAdd))
+                throw new ServiceException("Already sent an request to this user");
+
+            if(request.getId().getFirstElement().equals(secondUserUUID) &&
+                    request.getId().getSecondElement().equals(firstUserUUID))
+                throw new ServiceException("This user sent you a friendship request");
+        }
         repoRequest.save(new Request(firstUserUUID,secondUserUUID,sentTime,requestStatus));
 
     }
 
+    public List<User> getUsersWithout(UUID userUUID){
+        ArrayList<User> users = new ArrayList<>((Collection<User>)getUsers());
+
+        users.removeIf(user->
+            user.getUserID().equals(userUUID)
+        );
+
+        return users;
+    }
     public List<Request> getReceivedRequestForUser(UUID userUUID){
         ArrayList<Request> receivedRequests = new ArrayList<>();
 
@@ -42,6 +70,27 @@ public class Service {
         return receivedRequests;
     }
 
+    public List<UserFriendshipWrapper> getFriendsForUser(UUID userUUID) throws RepositoryException {
+        ArrayList<Friendship> friendships = new ArrayList<>((Collection<Friendship>) getFriendships());
+
+        friendships = (ArrayList<Friendship>) friendships
+                .stream()
+                .filter(f->f.getFirstUserID().equals(userUUID) || f.getSecondUserID().equals(userUUID))
+                .collect(Collectors.toList());
+
+        ArrayList<UserFriendshipWrapper> userFriendshipWrappers = new ArrayList<>();
+        for(Friendship f : friendships){
+            UUID friendUUID;
+            if(f.getFirstUserID().equals(userUUID))
+                friendUUID = f.getSecondUserID();
+            else
+                friendUUID = f.getFirstUserID();
+            userFriendshipWrappers.add(new UserFriendshipWrapper(findOne(friendUUID),f));
+        }
+
+        return userFriendshipWrappers;
+
+    }
     public List<UserRequestWrapper> usersThatSentRequestTo(UUID userUUID){
         ArrayList<UserRequestWrapper> users = new ArrayList<>();
 
@@ -96,11 +145,11 @@ public class Service {
     public Iterable<Request> findAllRequest(){
         return repoRequest.findAll();
     }
-    public void updateOnlineTime(User loggedUser,long nanoSecondsTime) throws RepositoryException {
-            loggedUser.setNanoSecondsOnline(nanoSecondsTime);
+    public void updateOnlineTime(User loggedUser,long start,long finish) throws RepositoryException {
+            loggedUser.setNanoSecondsOnline(loggedUser.getNanoSecondsOnline() + finish - start);
             repoUser.update(loggedUser);
     }
-    public Service(Repository<UUID, User> repoUser, Repository<Pair<UUID, UUID>, Friendship> repoFriendship,Repository<OrderPair<UUID,UUID>,Request> repoRequest) {
+    public Service(Repository<UUID, User> repoUser, Repository<Pair<UUID, UUID>, Friendship> repoFriendship,RepositoryDatabaseRequest repoRequest) {
         this.repoUser = repoUser;
         this.repoFriendship = repoFriendship;
         this.repoRequest = repoRequest;
@@ -168,7 +217,7 @@ public class Service {
         }
         throw new ServiceException("An user with this email was not registered");
     }
-    public void updateUser(String email,String newFirstName, String newLastName, String newEmail) throws ServiceException, RepositoryException, ValidationException {
+    public void updateUser(String email,String newFirstName, String newLastName, String newEmail) throws Exception {
 
         if(!emailExists(email))
             throw new ServiceException("This email does not exist");
@@ -197,7 +246,7 @@ public class Service {
     }
 
     public Iterable<Request> getRequests() {
-        return null;
+        return repoRequest.findAll();
     }
 
 

@@ -1,7 +1,6 @@
 package com.example.toyneworkproject.repository.database;
 
-import com.example.toyneworkproject.domain.Friendship;
-import com.example.toyneworkproject.domain.request.Request;
+import com.example.toyneworkproject.domain.Request;
 import com.example.toyneworkproject.exceptions.RepositoryException;
 import com.example.toyneworkproject.repository.Repository;
 import com.example.toyneworkproject.utils.pairDataStructure.OrderPair;
@@ -25,7 +24,7 @@ public class RepositoryDatabaseRequest implements Repository<OrderPair<UUID,UUID
         this.username = username;
         this.password = password;
     }
-    private final String SAVE_REQUEST_SQL ="INSERT INTO requests(\"firstUserUUID\",\"secondUserUUID\",\"sentTime\",\"requestStatus\")" +
+    private final String SAVE_REQUEST_SQL ="INSERT INTO requests(\"firstUserUUID\",\"secondUserUUID\",\"sentDate\",\"requestStatus\")" +
             " VALUES(?, ? , ?, ?) ;";
 
     private final String DELETE_REQUEST_SQL="DELETE from requests " +
@@ -34,6 +33,9 @@ public class RepositoryDatabaseRequest implements Repository<OrderPair<UUID,UUID
     private final String FIND_ONE_REQUEST_SQL = "SELECT * from requests" +
             " WHERE \"firstUserUUID\" = ? AND \"secondUserUUID\" = ? ;";
 
+
+    private final String UPDATE_REQUEST_STATUS_SQL ="UPDATE requests set \"requestStatus\" = ? " +
+            "\nWHERE \"firstUserUUID\" = ? AND \"secondUserUUID\" = ? ;";
     private final String GET_ALL_REQUESTS_SQL = "SELECT * from requests";
     @Override
     public Request save(Request entity) throws RepositoryException {
@@ -43,7 +45,7 @@ public class RepositoryDatabaseRequest implements Repository<OrderPair<UUID,UUID
             ps.setObject(1,entity.getId().getFirstElement());
             ps.setObject(2,entity.getId().getSecondElement());
             ps.setDate(3, Date.valueOf(entity.getSentTime().toLocalDate()));
-
+            ps.setString(4,entity.getRequestStatus());
             ps.executeUpdate();
             return entity;
         } catch (SQLException e) {
@@ -73,13 +75,15 @@ public class RepositoryDatabaseRequest implements Repository<OrderPair<UUID,UUID
     @Override
     public Request findOne(OrderPair<UUID, UUID> uuiduuidOrderPair) throws RepositoryException {
         try (Connection connection = DriverManager.getConnection(URL, username, password);
-        PreparedStatement statement = connection.prepareStatement(FIND_ONE_REQUEST_SQL);
-        ResultSet resultSet = statement.executeQuery()) {
-
+        PreparedStatement statement = connection.prepareStatement(FIND_ONE_REQUEST_SQL)){
+         statement.setObject(1,uuiduuidOrderPair.getFirstElement());
+         statement.setObject(2,uuiduuidOrderPair.getSecondElement());
+        ResultSet resultSet = statement.executeQuery();
+        resultSet.next();
 
             UUID firstUserUUID = (UUID) resultSet.getObject("firstUserUUID");
             UUID secondUserUUID = (UUID) resultSet.getObject("secondUserUUID");
-            LocalDate sentTime = ((Date) resultSet.getObject("sentTime")).toLocalDate();
+            LocalDate sentTime = ((Date) resultSet.getObject("sentDate")).toLocalDate();
             String requestStatus = resultSet.getString("requestStatus");
 
 
@@ -89,6 +93,21 @@ public class RepositoryDatabaseRequest implements Repository<OrderPair<UUID,UUID
         }
     }
 
+    public void updateRequestStatus(OrderPair<UUID,UUID> requestID,String newRequestStatus) throws RepositoryException {
+        try (Connection connection = DriverManager.getConnection(URL, username, password);
+             PreparedStatement ps = connection.prepareStatement(UPDATE_REQUEST_STATUS_SQL)) {
+
+            ps.setString(1, newRequestStatus);
+            ps.setObject(2,requestID.getFirstElement());
+            ps.setObject(3,requestID.getSecondElement());
+
+            ps.executeUpdate();
+
+
+        } catch (SQLException e) {
+            throw new RepositoryException("Problems ocurred when trying to update the request status");
+        }
+    }
     @Override
     public Iterable<Request> findAll() {
         try (Connection connection = DriverManager.getConnection(URL, username, password);
@@ -100,7 +119,7 @@ public class RepositoryDatabaseRequest implements Repository<OrderPair<UUID,UUID
             while (resultSet.next()) {
                 UUID firstUserUUID = (UUID) resultSet.getObject("firstUserUUID");
                 UUID secondUserUUID = (UUID) resultSet.getObject("secondUserUUID");
-                LocalDate sentTime = ((Date) resultSet.getObject("sentTime")).toLocalDate();
+                LocalDate sentTime = ((Date) resultSet.getObject("sentDate")).toLocalDate();
                 String requestStatus = resultSet.getString("requestStatus");
 
                 requests.add(new Request(firstUserUUID,secondUserUUID,sentTime.atStartOfDay(),requestStatus));

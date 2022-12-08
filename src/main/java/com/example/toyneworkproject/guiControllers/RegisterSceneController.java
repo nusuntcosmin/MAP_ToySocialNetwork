@@ -64,10 +64,12 @@ public class RegisterSceneController extends AbstractController {
                                                 txtEmailRegister.getText());
 
             securePasswordController.registerUser(newUser.getUserID(), passEnterRegister.getText());
-            warnTextRegister.setText("User created succesfully, loading the login page");
-            Thread.sleep(1000);
-            MainApp.changeScene("startScene.fxml");
-
+            warnTextRegister.setText("User created succesfully, go back to the login page");
+            txtEmailRegister.clear();
+            txtFirstNameRegister.clear();
+            txtLastNameRegister.clear();
+            passEnterRegister.clear();
+            passReEnterRegister.clear();
 
         }catch (Exception Ex){
             warnTextRegister.setText(Ex.getMessage());

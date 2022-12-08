@@ -11,10 +11,10 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.toyneworkproject.guiControllers.StartSceneController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:controller="com.example.toyneworkproject.guiControllers.StartSceneController">
    <right>
       <AnchorPane fx:id="warnTextLogin" prefHeight="400.0" prefWidth="258.0" BorderPane.alignment="CENTER">
-         <Label layoutX="71.0" layoutY="46.0" text="Sign in">
+         <Label layoutX="61.0" layoutY="14.0" text="Sign in">
             <font>
                <Font size="26.0" />
             </font>

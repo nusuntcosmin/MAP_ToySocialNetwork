@@ -10,6 +10,9 @@ module com.example.toyneworkproject {
     exports com.example.toyneworkproject.service;
     exports com.example.toyneworkproject.domain;
     exports com.example.toyneworkproject.repository;
+    exports com.example.toyneworkproject.utils.pairDataStructure;
+    exports com.example.toyneworkproject.exceptions;
+    exports com.example.toyneworkproject.repository.database;
 
     opens com.example.toyneworkproject.guiControllers to javafx.fxml;
 }
