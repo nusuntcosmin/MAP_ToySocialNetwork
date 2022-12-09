@@ -53,7 +53,7 @@ public class RequestsSceneController extends AbstractController{
     void unsendButtonPressed() throws RepositoryException {
         service.deleteRequest(sentRequestsTableView.getSelectionModel().getSelectedItem().getRequest().getId());
         reloadSentRequests();
-        selectedSentRequestText.setText("");
+        selectedSentRequestText.setText("User deleted succesfully");
     }
 
     @FXML

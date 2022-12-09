@@ -14,8 +14,6 @@ import javafx.scene.text.Text;
 
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Collection;
 
 public class UserSearchSceneController extends AbstractController{
 
@@ -48,7 +46,7 @@ public class UserSearchSceneController extends AbstractController{
                 sentRequestButton.setVisible(false);
                 sentRequestButton.setDisable(true);
                 selectedUser.setText("");
-                if(newValue.isEmpty() ||   newValue.isBlank() || newValue == null)
+                if(newValue.isEmpty() ||   newValue.isBlank())
                     return true;
 
 

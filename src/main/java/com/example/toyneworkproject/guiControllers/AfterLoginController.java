@@ -31,7 +31,7 @@ public class AfterLoginController extends AbstractController {
 
     @FXML
     public Text totalTimeSpentOnline;
-    
+
     public AfterLoginController(){
             loggedUser = (User) MainApp.getParameterFromScene();
             logInStart = System.nanoTime();
