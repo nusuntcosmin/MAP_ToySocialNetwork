@@ -5,6 +5,7 @@ import com.example.toyneworkproject.exceptions.RepositoryException;
 import com.example.toyneworkproject.exceptions.ServiceException;
 import com.example.toyneworkproject.exceptions.ValidationException;
 import com.example.toyneworkproject.repository.Repository;
+import com.example.toyneworkproject.repository.database.RepositoryDatabaseMessage;
 import com.example.toyneworkproject.repository.database.RepositoryDatabaseRequest;
 import com.example.toyneworkproject.utils.pairDataStructure.OrderPair;
 import com.example.toyneworkproject.utils.pairDataStructure.Pair;
@@ -23,6 +24,25 @@ public class Service {
 
     Validator<User> userValidator;
 
+    RepositoryDatabaseMessage repoMessages;
+
+    public void addMessage(UUID fromUserUUID, UUID toUserUUID, String messageContent) throws RepositoryException {
+        repoMessages.save(new Message(fromUserUUID,toUserUUID,messageContent,LocalDateTime.now()));
+    }
+
+    private Iterable<Message> getMessagesBetweenUsers(UUID firstUserUUID, UUID secondUserUUID){
+        return repoMessages.getMessagesBetweenUsers(firstUserUUID,secondUserUUID);
+    }
+
+    public ArrayList<Message> getOrderedByTimeMessagesBetweenUsers(UUID firstUserUUID, UUID secondUserUUID){
+
+        ArrayList<Message> messagesBetweenUsers = (ArrayList<Message>) getMessagesBetweenUsers(firstUserUUID,secondUserUUID);
+
+        messagesBetweenUsers.sort(Comparator.comparing(Message::getSentTime));
+
+        return messagesBetweenUsers;
+
+    }
 
     public void updateRequestStatus(OrderPair<UUID,UUID>requestID, String newRequestStatus) throws RepositoryException {
         repoRequest.updateRequestStatus(requestID,newRequestStatus);
@@ -70,6 +90,29 @@ public class Service {
         return receivedRequests;
     }
 
+    public List<User> getUserFriendsForUser(UUID userUUID) throws RepositoryException {
+        ArrayList<Friendship> friendships = new ArrayList<>((Collection<Friendship>) getFriendships());
+
+        friendships = (ArrayList<Friendship>) friendships
+                .stream()
+                .filter(f->f.getFirstUserID().equals(userUUID) || f.getSecondUserID().equals(userUUID))
+                .collect(Collectors.toList());
+
+        ArrayList<User> userFriends = new ArrayList<>();
+
+        for(Friendship f : friendships){
+            UUID friendUUID;
+            if(f.getFirstUserID().equals(userUUID))
+                friendUUID = f.getSecondUserID();
+            else
+                friendUUID = f.getFirstUserID();
+
+            userFriends.add(findOne(friendUUID));
+        }
+
+        return userFriends;
+
+    }
     public List<UserFriendshipWrapper> getFriendsForUser(UUID userUUID) throws RepositoryException {
         ArrayList<Friendship> friendships = new ArrayList<>((Collection<Friendship>) getFriendships());
 
@@ -149,8 +192,9 @@ public class Service {
             loggedUser.setNanoSecondsOnline(loggedUser.getNanoSecondsOnline() + finish - start);
             repoUser.update(loggedUser);
     }
-    public Service(Repository<UUID, User> repoUser, Repository<Pair<UUID, UUID>, Friendship> repoFriendship,RepositoryDatabaseRequest repoRequest) {
+    public Service(Repository<UUID, User> repoUser, Repository<Pair<UUID, UUID>, Friendship> repoFriendship,RepositoryDatabaseRequest repoRequest,RepositoryDatabaseMessage repoMessages) {
         this.repoUser = repoUser;
+        this.repoMessages = repoMessages;
         this.repoFriendship = repoFriendship;
         this.repoRequest = repoRequest;
         userValidator = new UserValidator();

@@ -60,10 +60,9 @@ public class UserSearchSceneController extends AbstractController{
             });
         });
 
-        SortedList<User> sortedData = new SortedList<>(filteredData);
-        sortedData.comparatorProperty().bind(usersTableView.comparatorProperty());
 
-        usersTableView.setItems(sortedData);
+
+        usersTableView.setItems(filteredData);
 
     }
 

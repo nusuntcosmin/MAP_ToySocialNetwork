@@ -12,7 +12,6 @@ public class UserRequestWrapper {
     public String userName;
     private String userEmail;
     private String requestSentTime;
-
     private User user;
 
     public User getUser() {

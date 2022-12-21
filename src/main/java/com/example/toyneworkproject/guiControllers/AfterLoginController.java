@@ -68,6 +68,12 @@ public class AfterLoginController extends AbstractController {
     }
 
     @FXML
+    void messageButtonPressed() throws IOException {
+        MainApp.sendParameterToScene(loggedUser);
+        MainApp.changeSceneAndSize("scenes/messageScene.fxml",440,650);
+    }
+
+    @FXML
     public void requestsButtonPressed() throws IOException {
         MainApp.sendParameterToScene(loggedUser);
         MainApp.changeScene("scenes/requestsScenes.fxml");

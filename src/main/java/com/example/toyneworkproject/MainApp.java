@@ -34,6 +34,12 @@ public class MainApp extends Application {
         appStage.getScene().setRoot(pane);
     }
 
+    public static void changeSceneAndSize(String fxml, int height, int width) throws IOException {
+        appStage.setWidth(width);
+        appStage.setHeight(height);
+        changeScene(fxml);
+    }
+
     public static void sendParameterToScene(Object argument){
         appStage.setUserData(argument);
 

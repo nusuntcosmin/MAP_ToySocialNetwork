@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.toyneworkproject.guiControllers.MessageSceneController">
+   <children>
+      <ImageView fitHeight="462.0" fitWidth="637.0" layoutX="-448.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../img/istockphoto-1139402489-612x612.jpg" />
+         </image>
+      </ImageView>
+      <TextField fx:id="friendsSearchBar" layoutX="14.0" layoutY="76.0" prefHeight="25.0" prefWidth="168.0" />
+      <ListView fx:id="friendsList" layoutX="14.0" layoutY="120.0" onMouseClicked="#usersSearchItemSelectionChanged" prefHeight="250.0" prefWidth="168.0" />
+      <ImageView blendMode="COLOR_BURN" fitHeight="48.0" fitWidth="52.0" layoutX="28.0" layoutY="14.0" onMouseClicked="#returnMousePressed" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../img/backButton.jpg" />
+         </image>
+      </ImageView>
+      <TextField fx:id="messageToSendTxtField" layoutX="199.0" layoutY="357.0" prefHeight="25.0" prefWidth="333.0" />
+      <ScrollPane fx:id="scrollPaneMessage" layoutX="196.0" layoutY="43.0" prefHeight="311.0" prefWidth="378.0">
+         <content>
+            <VBox fx:id="vBoxMessage" prefHeight="333.0" prefWidth="355.0" />
+         </content>
+      </ScrollPane>
+      <Text fx:id="messageUserReceiverText" layoutX="206.0" layoutY="27.0" strokeType="OUTSIDE" strokeWidth="0.0">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </Text>
+      <Button fx:id="sendButton" layoutX="534.0" layoutY="358.0" mnemonicParsing="false" onAction="#sentButtonPressed" prefHeight="25.0" prefWidth="50.0" text="Button" />
+   </children>
+</AnchorPane>
